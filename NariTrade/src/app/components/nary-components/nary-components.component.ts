@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { NaryComponentService } from '../../services/nary-component.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nary-components',
-  imports: [],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './nary-components.component.html',
   styleUrl: './nary-components.component.css',
 })
@@ -15,6 +16,8 @@ export class NaryComponentsComponent {
   naryList: any = [];
   naryForm: FormGroup | any;
   idnary: any;
+  editablenary: boolean = false;
+
   constructor(
     private naryService: NaryComponentService,
     private formBuilder: FormBuilder,

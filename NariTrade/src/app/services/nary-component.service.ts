@@ -8,8 +8,6 @@ import { Observable } from 'rxjs';
 export class NaryComponentService {
   constructor(private http: HttpClient) {}
   apiUri = '/api/narycomponents';
-  idnary: any;
-  editablenary: boolean = false;
   httpOptions = new HttpHeaders().set('Content-Type', 'application/json');
 
   getAllnaryData(): Observable<any> {
@@ -30,19 +28,5 @@ export class NaryComponentService {
     return this.http.get<any>(this.apiUri + '/' + id, {
       headers: this.httpOptions,
     });
-  }
-  updatenaryEntry() {
-    //Removiendo valores vacios del formulario de actualización
-    for (let key in this.naryForm.value) {
-      if (this.naryForm.value[key] === '') {
-        this.naryForm.removeControl(key);
-      }
-    }
-    this.naryService
-      .updateAnimal(this.idnary, this.naryForm.value)
-      .subscribe(() => {
-        //Enviando mensaje de confirmación
-        this.newMessage('Animal editado');
-      });
   }
 }
