@@ -7,13 +7,13 @@ import { Observable } from 'rxjs';
 })
 export class NaryComponentService {
   constructor(private http: HttpClient) {}
-  apiUri = '/api/micomponente';
+  apiUri = '/api/narycomponents';
   httpOptons = new HttpHeaders().set('Content-Type', 'application/json');
 
-  getAllmicomponenteData(): Observable<any> {
+  getAllnaryData(): Observable<any> {
     return this.http.get<any>(this.apiUri);
   }
-  newmicomponente(data: any): Observable<any> {
+  newnary(data: any): Observable<any> {
     return this.http.post<any>(this.apiUri, data, { headers: this.httpOptons });
   }
 }

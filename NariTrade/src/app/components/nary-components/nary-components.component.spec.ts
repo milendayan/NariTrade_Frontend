@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MicomponenteComponent } from './micomponente.component';
+import { NaryComponentsComponent } from './nary-components.component';
 
-describe('MicomponenteComponent', () => {
-  let component: MicomponenteComponent;
-  let fixture: ComponentFixture<MicomponenteComponent>;
+describe('NaryComponentsComponent', () => {
+  let component: NaryComponentsComponent;
+  let fixture: ComponentFixture<NaryComponentsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MicomponenteComponent]
+      imports: [NaryComponentsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MicomponenteComponent);
+    fixture = TestBed.createComponent(NaryComponentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
