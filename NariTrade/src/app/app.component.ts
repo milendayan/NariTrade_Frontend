@@ -4,9 +4,10 @@ import { NaryComponentsComponent } from './components/nary-components/nary-compo
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, NaryComponentsComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'NariTrade';
