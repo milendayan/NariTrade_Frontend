@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class NaryComponentService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   apiUri = '/api/narycomponents';
   httpOptions = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -28,5 +28,10 @@ export class NaryComponentService {
     return this.http.get<any>(this.apiUri + '/' + id, {
       headers: this.httpOptions,
     });
+  }
+  deleteNari(id: any) {
+    return this.http.delete<any>(
+      this.apiUri + "/" + id,
+      { headers: this.httpOptions });
   }
 }

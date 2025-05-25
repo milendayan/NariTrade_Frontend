@@ -23,7 +23,7 @@ export class NaryComponentsComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
   getAllAnimals() {
     this.naryService.getAllnaryData().subscribe((data: {}) => {
       this.naryList = data;
@@ -78,4 +78,14 @@ export class NaryComponentsComponent {
     });
     this.editablenary = !this.editablenary;
   }
+  deleteAnimalEntry(id: any) {
+    console.log(id)
+    this.naryService.deleteNari(id).subscribe(
+      () => {
+        //Enviando mensaje de confirmación
+        this.newMessage("Animal eliminado");
+      }
+    );
+  }
+
 }
