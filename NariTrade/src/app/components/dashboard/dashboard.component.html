@@ -2,11 +2,16 @@
     <header class="dashboard-header">
         <h1>NariTrade</h1>
 
+        <nav class="dashboard-nav" *ngIf="authService.currentUserValue">
+            <a routerLink="/inicio" class="nav-link">Inicio</a>
+            <a routerLink="/publicar" class="nav-link">Publicar</a>
+            <a routerLink="/mis-anuncios" class="nav-link">Mis Anuncios</a>
+            <a routerLink="/ofertar" class="nav-link">Ofertar</a>
+        </nav>
+
         <div *ngIf="authService.currentUserValue" class="user-info">
-            <h2>Bienvenido {{ authService.currentUserValue.correo }}</h2>
-            <div *ngIf="authService.currentUserValue.rol === 'admin'" class="admin-badge">
-                (Administrador)
-            </div>
+            <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span>
+            <span *ngIf="authService.currentUserValue.rol === 'admin'" class="admin-badge">(Administrador)</span>
             <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
         </div>
 
@@ -19,42 +24,31 @@
     <section class="products-section">
         <h2>Productos disponibles</h2>
 
-        <div *ngIf="productos && productos.length > 0; else noProductos">
-            <div class="product-card" *ngFor="let producto of productos">
-                <img [src]="'/assets/uploads/' + producto.img[0]" alt="{{ producto.titulo }}" />
-                <h3>{{ producto.titulo }}</h3>
-                <p>{{ producto.descri }}</p>
-                <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
-                <p><strong>Precio:</strong> ${{ producto.precio }}</p>
-                <p><strong>Publicado por:</strong> {{ producto.owner.nombre }} {{ producto.owner.apellido }}</p>
+        <ng-template [ngIf]="productos && productos.length > 0" [ngIfElse]="noProductos">
+            <div class="products-grid">
+                <div *ngFor="let producto of productos" class="product-card">
+                    <img [src]="'/assets/uploads/' + producto.img[0]" [alt]="producto.titulo" class="product-image" />
+                    <div class="product-details">
+                        <h3>{{ producto.titulo }}</h3>
+                        <p>{{ producto.descri }}</p>
+                        <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+                        <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+                        <p><strong>Estado:</strong> {{ producto.estado }}</p>
+                        <p><strong>Dueño:</strong> {{ producto.owner?.nombre }} {{ producto.owner?.apellido }}</p>
+
+                        <ng-container *ngIf="producto.idPerson === authService.currentUserValue?._id; else botonSolicitar">
+                            <button (click)="seleccionarMiProducto(producto._id)" class="trade-btn">Ofrecer este producto</button>
+                        </ng-container>
+                        <ng-template #botonSolicitar>
+                            <button (click)="solicitarTrueque(producto._id)" class="trade-btn">Solicitar trueque</button>
+                        </ng-template>
+                    </div>
+                </div>
             </div>
-        </div>
+        </ng-template>
 
         <ng-template #noProductos>
             <p>No hay productos disponibles.</p>
         </ng-template>
     </section>
-
-    <div *ngIf="!isLoading && productos.length > 0" class="products-grid">
-        <div *ngFor="let producto of productos" class="product-card">
-            <img [src]="producto.imagen || 'https://via.placeholder.com/150'" [alt]="producto.titulo" class="product-image" />
-
-            <div class="product-details">
-                <h3>{{ producto.titulo }}</h3>
-                <p>{{ producto.descri }}</p>
-                <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
-                <p><strong>Precio:</strong> ${{ producto.precio }}</p>
-                <p><strong>Estado:</strong> {{ producto.estado }}</p>
-                <p><strong>Dueño:</strong> {{ producto.owner?.nombre }} {{ producto.owner?.apellido }}</p>
-
-                <ng-container *ngIf="producto.idPerson === authService.currentUserValue?._id; else botonSolicitar">
-                    <button (click)="seleccionarMiProducto(producto._id)" class="trade-btn">Ofrecer este producto</button>
-                </ng-container>
-
-                <ng-template #botonSolicitar>
-                    <button (click)="solicitarTrueque(producto._id)" class="trade-btn">Solicitar trueque</button>
-                </ng-template>
-            </div>
-        </div>
-    </div>
 </div>
