@@ -1,4 +1,3 @@
-// En auth.services.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -18,37 +17,26 @@ export class AuthService {
   login(correo: string, clave: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/Login`, { correo, clave }).pipe(
       tap((res: any) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('usuario', res.usuario);
-        localStorage.setItem('rol', res.usuarioRol);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('usuario', res.usuario);
+          localStorage.setItem('rol', res.usuarioRol);
+        }
         this.currentUserSubject.next(res); // Actualiza el observable
       })
     );
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return typeof window !== 'undefined' && !!localStorage.getItem('token');
   }
-  // Añade este método
-  /*isLoggedIn(): boolean {
-    return (
-      typeof window !== 'undefined' && !!localStorage.getItem('currentUser')
-    );
-  }*/
-
-  // O si usas localStorage:
-  /*
-  
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('currentUser');
-  }
-  */
 
   logout(): Observable<any> {
-    const token = localStorage.getItem('token');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
     return this.http
       .post(
-        'http://localhost:3070/NariTrade/logout',
+        `${this.apiUrl}/logout`,
         {},
         {
           headers: {
@@ -59,7 +47,9 @@ export class AuthService {
       .pipe(
         tap(() => {
           this.clearCurrentUser();
-          localStorage.clear();
+          if (typeof window !== 'undefined') {
+            localStorage.clear();
+          }
         })
       );
   }
@@ -82,3 +72,4 @@ export class AuthService {
     this.currentUserSubject.next(null);
   }
 }
+

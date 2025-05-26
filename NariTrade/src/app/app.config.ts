@@ -23,5 +23,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(BrowserModule, ToastrModule.forRoot()),
     provideToastr(),
     provideAnimations(),
+    provideHttpClient(withFetch()),
   ],
 };

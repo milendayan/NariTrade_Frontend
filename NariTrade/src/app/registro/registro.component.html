@@ -1,0 +1,90 @@
+<div class="login-container">
+    <div class="login-card">
+        <h2 class="brand-title">NariTrade</h2>
+        <h2 class="brand-title">Registro de Usuarios</h2>
+
+        <form (ngSubmit)="onRegister()" class="login-form">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input id="nombre" name="nombre" [(ngModel)]="nombre" required class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input id="apellido" name="apellido" [(ngModel)]="apellido" required class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="tipoDocumento">Tipo de documento</label>
+                <select id="tipoDocumento" name="tipoDocumento" [(ngModel)]="tipoDocumento" required class="form-input">
+          <option value="CC">Cédula</option>
+          <option value="CE">Cédula Extranjera</option>
+          <option value="PASAPORTE">Pasaporte</option>
+        </select>
+            </div>
+
+            <div class="form-group">
+                <label for="numDocumento">Número de documento</label>
+                <input id="numDocumento" name="numDocumento" [(ngModel)]="numDocumento" required class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="genero">Género</label>
+                <select id="genero" name="genero" [(ngModel)]="genero" required class="form-input">
+          <option value="Mujer">Mujer</option>
+          <option value="Hombre">Hombre</option>
+          <option value="Sin Especificar">Sin especificar</option>
+        </select>
+            </div>
+
+            <div class="form-group">
+                <label for="celular">Celular</label>
+                <input id="celular" name="celular" [(ngModel)]="celular" required class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="fechaNacimiento">Fecha de nacimiento</label>
+                <input id="fechaNacimiento" name="fechaNacimiento" type="date" [(ngModel)]="fechaNacimiento" required class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo electrónico</label>
+                <input id="correo" name="correo" type="email" [(ngModel)]="correo" required class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="clave">Contraseña</label>
+                <input id="clave" name="clave" type="password" [(ngModel)]="clave" required class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="confirmarClave">Confirmar contraseña</label>
+                <input id="confirmarClave" name="confirmarClave" type="password" [(ngModel)]="confirmarClave" required class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="departamento">Departamento</label>
+                <select id="departamento" name="departamento" [(ngModel)]="departamento" required class="form-input">
+          <option value="Distrito Capital">Distrito Capital</option>
+          <option value="Cundinamarca">Cundinamarca</option>
+          <option value="Boyaca">Boyacá</option>
+          <option value="Antioquia">Antioquia</option>
+          <option value="Barranquilla">Barranquilla</option>
+          <option value="Cartagena">Cartagena</option>
+          <option value="Santa Marta">Santa Marta</option>
+          <option value="Valle del Cauca">Valle del Cauca</option>
+        </select>
+            </div>
+
+            <button type="submit" class="login-button">Registrarse</button>
+
+            <p *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+            </p>
+        </form>
+
+        <div class="footer-links">
+            <a routerLink="/login" class="text-link">¿Ya tienes una cuenta?</a>
+        </div>
+    </div>
+</div>
