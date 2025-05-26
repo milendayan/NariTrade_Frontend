@@ -8,9 +8,15 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3070/NariTrade/User';
+  private apiUrl = 'http://localhost:3070/NariTrade';
+
+  private currentUserSubject = new BehaviorSubject<any>(null);
+  public currentUser = this.currentUserSubject.asObservable();
+
+  constructor(private http: HttpClient) {}
+
   login(correo: string, clave: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { correo, clave }).pipe(
+    return this.http.post(`${this.apiUrl}/Login`, { correo, clave }).pipe(
       tap((res: any) => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('usuario', res.usuario);
@@ -20,18 +26,19 @@ export class AuthService {
     );
   }
 
-  private currentUserSubject = new BehaviorSubject<any>(null);
-  public currentUser = this.currentUserSubject.asObservable();
-
-  constructor(private http: HttpClient) {}
-
-  // Añade este método
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+  // Añade este método
+  /*isLoggedIn(): boolean {
+    return (
+      typeof window !== 'undefined' && !!localStorage.getItem('currentUser')
+    );
+  }*/
 
   // O si usas localStorage:
   /*
+  
   isLoggedIn(): boolean {
     return !!localStorage.getItem('currentUser');
   }
