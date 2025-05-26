@@ -1,0 +1,49 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div *ngIf="authService.currentUserValue" class="user-info">
+      <h1>Bienvenido {{ authService.currentUserValue.correo }}</h1>
+      <div
+        *ngIf="authService.currentUserValue.rol === 'admin'"
+        class="admin-badge"
+      >
+        (Administrador)
+      </div>
+      <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
+    </div>
+
+    <div *ngIf="!authService.currentUserValue" class="not-logged">
+      <p>No has iniciado sesión</p>
+      <a routerLink="/login" class="login-link">Ir al login</a>
+    </div>
+  </header>
+
+  <section class="products-section">
+    <h2>Productos disponibles</h2>
+
+    <div *ngIf="isLoading" class="loading">
+      <p>Cargando productos...</p>
+    </div>
+
+    <div *ngIf="!isLoading && productos.length === 0" class="no-products">
+      <p>No se encontraron productos</p>
+    </div>
+
+    <div class="products-grid">
+      <div *ngFor="let producto of productos" class="product-card">
+        <img
+          [src]="producto.imagen || 'https://via.placeholder.com/150'"
+          [alt]="producto.titulo"
+          class="product-image"
+        />
+        <div class="product-details">
+          <h3>{{ producto.titulo }}</h3>
+          <p>{{ producto.descri }}</p>
+          <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+          <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+          <p><strong>Estado:</strong> {{ producto.estado }}</p>
+          <button (click)="trade(producto._id)" class="trade-btn">Trade</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

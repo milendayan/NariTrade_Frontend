@@ -1,0 +1,24 @@
+.loading,
+.no-products {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.admin-badge {
+  display: inline-block;
+  background-color: #d50000;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.product-details p {
+  margin: 0.3rem 0;
+}
+
+.product-details p strong {
+  color: #333;
+}
