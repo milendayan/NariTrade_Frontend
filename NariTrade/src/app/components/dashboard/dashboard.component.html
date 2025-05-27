@@ -3,7 +3,7 @@
         <h1>NariTrade</h1>
 
         <nav class="dashboard-nav" *ngIf="authService.currentUserValue">
-            <a routerLink="/inicio" class="nav-link">Inicio</a>
+            <a routerLink="/dashboard" class="nav-link">Inicio</a>
             <a routerLink="/publicar" class="nav-link">Publicar</a>
             <a routerLink="/mis-anuncios" class="nav-link">Mis Anuncios</a>
             <a routerLink="/ofertar" class="nav-link">Ofertar</a>
@@ -21,8 +21,13 @@
         </div>
     </header>
 
-    <section class="products-section">
+    <!-- Mostrar productos solo si el usuario ha iniciado sesión -->
+    <section class="products-section" *ngIf="authService.currentUserValue; else noSesion">
         <h2>Productos disponibles</h2>
+
+        <div *ngIf="isLoading">
+            <p>Cargando productos...</p>
+        </div>
 
         <ng-template [ngIf]="productos && productos.length > 0" [ngIfElse]="noProductos">
             <div class="products-grid">
@@ -51,4 +56,9 @@
             <p>No hay productos disponibles.</p>
         </ng-template>
     </section>
+
+    <!-- Si no ha iniciado sesión, mostrar este mensaje -->
+    <ng-template #noSesion>
+        <p class="no-session-msg">Debes iniciar sesión para ver los productos disponibles.</p>
+    </ng-template>
 </div>

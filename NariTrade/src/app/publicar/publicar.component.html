@@ -1,0 +1,50 @@
+<div class="container">
+    <h1>NariTrade</h1>
+
+    <nav class="dashboard-nav" *ngIf="authService.currentUserValue">
+        <a routerLink="/dashboard" class="nav-link">Inicio</a>
+        <a routerLink="/publicar" class="nav-link">Publicar</a>
+        <a routerLink="/mis-anuncios" class="nav-link">Mis Anuncios</a>
+        <a routerLink="/ofertar" class="nav-link">Ofertar</a>
+    </nav>
+
+    <div *ngIf="authService.currentUserValue" class="user-info">
+        <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span>
+        <span *ngIf="authService.currentUserValue.rol === 'admin'" class="admin-badge">(Administrador)</span>
+        <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
+    </div>
+
+    <!-- Mostrar formulario solo si está autenticado -->
+    <div *ngIf="authService.currentUserValue; else noSesion">
+        <h2>Publicar Anuncios</h2>
+        <form [formGroup]="formArticulo" (ngSubmit)="publicarArticulo()" enctype="multipart/form-data">
+            <label>Nombre del producto</label>
+            <input formControlName="titulo" type="text" required>
+
+            <label>Descripción</label>
+            <input formControlName="descri" type="text" required>
+
+            <label>Categoría</label>
+            <select formControlName="categoria" required>
+        <option value="Muebles">Muebles</option>
+        <option value="Deporte">Deporte</option>
+        <option value="Tecnología">Tecnología</option>
+        <option value="Libros">Libros</option>
+      </select>
+
+            <label>Precio</label>
+            <input formControlName="precio" type="number" required>
+
+            <label>Imagen del producto</label>
+            <input type="file" (change)="onImageChange($event)" multiple>
+
+            <button type="submit">Publicar anuncio</button>
+        </form>
+    </div>
+
+    <!-- Mensaje si no ha iniciado sesión -->
+    <ng-template #noSesion>
+        <p class="no-session-msg">Debes iniciar sesión para publicar un anuncio.</p>
+        <a routerLink="/login" class="login-link">Ir al login</a>
+    </ng-template>
+</div>

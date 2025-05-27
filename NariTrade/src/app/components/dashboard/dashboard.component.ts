@@ -24,9 +24,15 @@ export class DashboardComponent implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+ngOnInit(): void {
+  if (!this.authService.currentUserValue) {
+    // Usuario no autenticado, redirigir al login
+    this.router.navigate(['/login']);
+  } else {
+    // Usuario autenticado, cargar productos
     this.listarProductos();
   }
+}
 
 listarProductos() {
   this.isLoading = true;
