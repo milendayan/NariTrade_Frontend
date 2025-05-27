@@ -1,0 +1,73 @@
+<div class="container">
+    <h1>NariTrade</h1>
+
+    <nav class="dashboard-nav" *ngIf="authService.currentUserValue">
+        <a routerLink="/dashboard" class="nav-link">Inicio</a>
+        <a routerLink="/publicar" class="nav-link">Publicar</a>
+        <a routerLink="/anuncios" class="nav-link">Mis Anuncios</a>
+        <a routerLink="/ofertar" class="nav-link">Ofertar</a>
+    </nav>
+
+    <div *ngIf="authService.currentUserValue" class="user-info">
+        <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span>
+        <span *ngIf="authService.currentUserValue.rol === 'admin'" class="admin-badge">(Administrador)</span>
+        <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
+    </div>
+
+    <ng-container *ngIf="authService.currentUserValue; else noSesion">
+        <h2>Mis Anuncios</h2>
+
+        <div *ngFor="let item of items" class="card mb-3">
+            <div class="card-body d-flex flex-column flex-md-row gap-4 align-items-start">
+                <div class="img-wrapper">
+                    <img *ngIf="item.img?.length > 0" [src]="item.img[0]" alt="Imagen del producto" class="product-img" />
+                    <span *ngIf="!item.img?.length">Sin imagen</span>
+                </div>
+
+                <form class="flex-grow-1">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del producto</label>
+                        <input type="text" class="form-control" [(ngModel)]="item.titulo" name="titulo{{ item._id }}" [readonly]="selectedItem?._id !== item._id">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <input type="text" class="form-control" [(ngModel)]="item.descri" name="descri{{ item._id }}" [readonly]="selectedItem?._id !== item._id">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Categoría</label>
+                        <select class="form-select" [(ngModel)]="item.categoria" name="categoria{{ item._id }}" [disabled]="selectedItem?._id !== item._id">
+              <option value="Muebles">Muebles</option>
+              <option value="Deporte">Deporte</option>
+              <option value="Tecnología">Tecnología</option>
+              <option value="Libros">Libros</option>
+            </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Precio</label>
+                        <input type="number" class="form-control" [(ngModel)]="item.precio" name="precio{{ item._id }}" [readonly]="selectedItem?._id !== item._id">
+                    </div>
+
+                    <div class="mb-3" *ngIf="selectedItem?._id === item._id">
+                        <label>Imagen del producto</label>
+                        <input type="file" (change)="onImageChange($event)" multiple>
+                    </div>
+
+                    <div class="mt-3 d-flex flex-wrap gap-2">
+                        <button type="button" *ngIf="selectedItem?._id !== item._id" class="btn btn-primary" (click)="editar(item)">Editar</button>
+                        <button type="button" *ngIf="selectedItem?._id === item._id" class="btn btn-success" (click)="guardarCambios()" [disabled]="!item.titulo || !item.precio">Guardar</button>
+                        <button type="button" *ngIf="selectedItem?._id === item._id" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+                        <button type="button" class="btn btn-danger" (click)="eliminar(item._id)">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-template #noSesion>
+        <p class="no-session-msg">Debes iniciar sesión para ver tus anuncios.</p>
+        <a routerLink="/login" class="login-link">Ir al login</a>
+    </ng-template>
+</div>

@@ -3,7 +3,7 @@ import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PublicarComponent } from './publicar/publicar.component';
 import { RegistroComponent } from './registro/registro.component';
-// Importa los otros componentes si los tienes
+import { AnunciosComponent } from './anuncios/anuncios.component'; // ← Asegúrate que la ruta es correcta
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -19,7 +19,11 @@ export const routes: Routes = [
     component: PublicarComponent,
     canActivate: [authGuard],
   },
-
+  {
+    path: 'anuncios', // ← Nueva ruta protegida
+    component: AnunciosComponent,
+    canActivate: [authGuard],
+  },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },
 ];

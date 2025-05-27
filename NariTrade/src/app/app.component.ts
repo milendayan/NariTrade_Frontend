@@ -4,11 +4,13 @@ import { RouterOutlet, RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.services';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, RouterOutlet, RouterModule, FormsModule],
+
   template: `
     <div class="app-container">
       <main>
