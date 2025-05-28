@@ -1,0 +1,68 @@
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1>NariTrade</h1>
+
+        <nav class="dashboard-nav" *ngIf="authService.currentUserValue">
+            <a routerLink="/dashboard" class="nav-link">Inicio</a>
+            <a routerLink="/publicar" class="nav-link">Publicar</a>
+            <a routerLink="/anuncios" class="nav-link">Mis Anuncios</a>
+            <a routerLink="/ofertar" class="nav-link">Ofertar</a>
+        </nav>
+
+        <div *ngIf="authService.currentUserValue" class="user-info">
+            <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span
+      >
+      <span
+        *ngIf="authService.currentUserValue.rol === 'admin'"
+        class="admin-badge"
+        >(Administrador)</span
+      >
+      <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <!-- ✅ Mover fuera del header -->
+  <div class="ofertar-container">
+    <div class="producto-deseado">
+      <h3>Producto que deseas</h3>
+      <div *ngIf="productoDeseado">
+        <p>{{ productoDeseado.titulo }}</p>
+        <img [src]="productoDeseado.img[0]" width="150" />
+        <p>{{ productoDeseado.precio | currency }}</p>
+      </div>
+    </div>
+
+    <div class="productos-propios">
+      <h3>Selecciona producto para ofrecer</h3>
+      <div class="productos-grid">
+        <div
+          *ngFor="let producto of misArticulos"
+          class="producto-card"
+          [class.seleccionado]="productoOferta?._id === producto._id"
+          (click)="seleccionarProductoOferta(producto)"
+        >
+          <img
+            *ngIf="producto.img?.[0] && producto.img[0].startsWith('data:image')"
+            [src]="producto.img[0]"
+            alt="Imagen de {{ producto.titulo }}"
+          />
+          <span
+            *ngIf="!producto.img?.[0] || !producto.img[0].startsWith('data:image')"
+            >Sin imagen válida</span
+          >
+
+          <div class="info">
+            <p>
+              <strong>{{ producto.titulo }}</strong>
+            </p>
+            <p>{{ producto.precio | currency }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="boton-oferta">
+    <button (click)="enviarSolicitud()">Enviar solicitud</button>
+  </div>
+</div>

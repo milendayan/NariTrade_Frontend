@@ -22,37 +22,37 @@ export class DashboardComponent implements OnInit {
     public authService: AuthService,
     private http: HttpClient,
     private router: Router
-  ) { }
+  ) {}
 
-ngOnInit(): void {
-  if (!this.authService.currentUserValue) {
-    // Usuario no autenticado, redirigir al login
-    this.router.navigate(['/login']);
-  } else {
-    // Usuario autenticado, cargar productos
-    this.listarProductos();
-  }
-}
-
-listarProductos() {
-  this.isLoading = true;
-
-  const token = localStorage.getItem('token'); // o de donde estés guardando el JWT
-  const headers = {
-    Authorization: `Bearer ${token}`
-  };
-
-  this.http.get<any[]>(`${this.apiUrl}/items`, { headers }).subscribe({
-    next: (data) => {
-      this.productos = data;
-      this.isLoading = false;
-    },
-    error: (err) => {
-      console.error('Error al cargar productos:', err);
-      this.isLoading = false;
+  ngOnInit(): void {
+    if (!this.authService.currentUserValue) {
+      // Usuario no autenticado, redirigir al login
+      this.router.navigate(['/login']);
+    } else {
+      // Usuario autenticado, cargar productos
+      this.listarProductos();
     }
-  });
-}
+  }
+
+  listarProductos() {
+    this.isLoading = true;
+
+    const token = localStorage.getItem('token'); // o de donde estés guardando el JWT
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    this.http.get<any[]>(`${this.apiUrl}/items`, { headers }).subscribe({
+      next: (data) => {
+        this.productos = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar productos:', err);
+        this.isLoading = false;
+      },
+    });
+  }
 
   logout() {
     this.authService.clearCurrentUser();
@@ -64,23 +64,28 @@ listarProductos() {
     alert('Producto seleccionado para ofrecer en trueque.');
   }
 
-  solicitarTrueque(idProductoQuiere: string) {
+  solicitarTrueque(idProductoQuiere: string): void {
     if (!this.productoSeleccionado) {
       alert('Primero selecciona uno de tus productos para ofrecer.');
       return;
     }
 
+    const token = localStorage.getItem('token');
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
     const url = `${this.apiUrl}/solicitar/${idProductoQuiere}/${this.productoSeleccionado}`;
 
-    this.http.post(url, {}, { withCredentials: true }).subscribe({
+    this.http.post(url, {}, { headers }).subscribe({
       next: () => {
         alert('Solicitud de trueque enviada con éxito.');
-        this.productoSeleccionado = '';
-        this.listarProductos();
+        this.productoSeleccionado = ' ';
+        this.listarProductos(); // Si tienes un método para refrescar la vista
       },
       error: (err) => {
         alert(err.error?.message || 'Error al solicitar trueque.');
-      }
+      },
     });
   }
 }

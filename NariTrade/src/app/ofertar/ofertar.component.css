@@ -61,17 +61,6 @@
     justify-content: center;
 }
 
-.welcome-text {
-    font-weight: 500;
-}
-
-.admin-badge {
-    background-color: #d50000;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-}
-
 .logout-btn {
     background-color: #d50000;
     color: white;
@@ -86,65 +75,87 @@
     background-color: #b71c1c;
 }
 
+.ofertar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 3rem;
+    /* reducido el gap para mejor proporción */
+    padding: 2rem;
+    flex-wrap: wrap;
+    /* permite que se acomoden mejor en pantallas pequeñas */
+}
 
-/* ===== Products ===== */
 
-.products-section h2 {
+/* Aplicar a ambos bloques */
+
+.producto-deseado,
+.productos-propios {
+    flex: 1;
+    max-width: 48%;
+    color: #d50000;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+
+/* Centrar los títulos */
+
+.producto-deseado h3,
+.productos-propios h3 {
     text-align: center;
-    margin-top: 2rem;
     margin-bottom: 1rem;
 }
 
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-    justify-content: center;
-    max-width: 1000px;
-    /* ajusta según el tamaño que necesites */
-    margin: 0 auto;
+
+/* Imagen deseada centrada */
+
+.producto-deseado img {
+    display: block;
+    margin: 1rem auto;
+    max-width: 100%;
+    height: auto;
 }
 
-.product-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+/* Productos ofertables */
+
+.productos-grid {
     display: flex;
-    flex-direction: column;
-    transition: transform 0.2s;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
-.product-card:hover {
-    transform: translateY(-4px);
-}
-
-.product-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.product-details {
-    padding: 1rem;
-}
-
-.product-details h3 {
-    margin: 0 0 0.5rem;
-}
-
-.trade-btn {
-    background-color: #d50000;
-    color: white;
-    border: none;
-    padding: 0.5rem;
-    width: 100%;
-    border-radius: 4px;
-    margin-top: 0.5rem;
+.producto-card {
+    width: 180px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 10px;
     cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.trade-btn:hover {
-    background-color: #b71c1c;
+.producto-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.producto-card.seleccionado {
+    border: 2px solid gold;
+    box-shadow: 0 0 12px gold;
+    background-color: #fffbe6;
+}
+
+.info {
+    margin-top: 10px;
 }

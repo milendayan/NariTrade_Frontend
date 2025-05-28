@@ -10,57 +10,82 @@
         </nav>
 
         <div *ngIf="authService.currentUserValue" class="user-info">
-            <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span>
-            <span *ngIf="authService.currentUserValue.rol === 'admin'" class="admin-badge">(Administrador)</span>
-            <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
-        </div>
+            <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span
+      >
+      <span
+        *ngIf="authService.currentUserValue.rol === 'admin'"
+        class="admin-badge"
+        >(Administrador)</span
+      >
+      <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
+    </div>
 
-        <div *ngIf="!authService.currentUserValue" class="not-logged">
-            <p>No has iniciado sesión</p>
-            <a routerLink="/login" class="login-link">Ir al login</a>
-        </div>
-    </header>
+    <div *ngIf="!authService.currentUserValue" class="not-logged">
+      <p>No has iniciado sesión</p>
+      <a routerLink="/login" class="login-link">Ir al login</a>
+    </div>
+  </header>
 
-    <!-- Mostrar productos solo si el usuario ha iniciado sesión -->
-    <section class="products-section" *ngIf="authService.currentUserValue; else noSesion">
-        <h2>Productos disponibles</h2>
+  <!-- Mostrar productos solo si el usuario ha iniciado sesión -->
+  <section
+    class="products-section"
+    *ngIf="authService.currentUserValue; else noSesion"
+  >
+    <h2>Productos disponibles</h2>
 
-        <div *ngIf="isLoading">
-            <p>Cargando productos...</p>
-        </div>
+    <div *ngIf="isLoading">
+      <p>Cargando productos...</p>
+    </div>
 
-        <ng-template [ngIf]="productos && productos.length > 0" [ngIfElse]="noProductos">
-            <div class="products-grid">
-                <div *ngFor="let producto of productos" class="product-card">
-                    <img *ngIf="producto.img?.length > 0" [src]="producto.img[0]" alt="Imagen del producto" class="product-image" />
-                    <span *ngIf="!producto.img?.length">Sin imagen</span>
+    <ng-template
+      [ngIf]="productos && productos.length > 0"
+      [ngIfElse]="noProductos"
+    >
+      <div class="products-grid">
+        <div *ngFor="let producto of productos" class="product-card">
+          <img
+            *ngIf="producto.img?.length > 0"
+            [src]="producto.img[0]"
+            alt="Imagen del producto"
+            class="product-image"
+          />
+          <span *ngIf="!producto.img?.length">Sin imagen</span>
 
-                    <div class="product-details">
-                        <h3>{{ producto.titulo }}</h3>
-                        <p>{{ producto.descri }}</p>
-                        <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
-                        <p><strong>Precio:</strong> ${{ producto.precio }}</p>
-                        <p><strong>Estado:</strong> {{ producto.estado }}</p>
-                        <p><strong>Dueño:</strong> {{ producto.owner?.nombre }} {{ producto.owner?.apellido }}</p>
+            <div class="product-details">
+                <h3>{{ producto.titulo }}</h3>
+                <p>{{ producto.descri }}</p>
+                <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+                <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+                <p><strong>Estado:</strong> {{ producto.estado }}</p>
+                <p>
+                    <strong>Dueño:</strong> {{ producto.owner?.nombre }} {{ producto.owner?.apellido }}
+                </p>
 
-                        <ng-container *ngIf="producto.idPerson === authService.currentUserValue?._id; else botonSolicitar">
-                            <button (click)="seleccionarMiProducto(producto._id)" class="trade-btn">Ofrecer este producto</button>
-                        </ng-container>
-                        <ng-template #botonSolicitar>
-                            <button (click)="solicitarTrueque(producto._id)" class="trade-btn">Solicitar trueque</button>
-                        </ng-template>
-                    </div>
-                </div>
+                <ng-container *ngIf="
+                producto.idPerson === authService.currentUserValue?._id;
+                else botonSolicitar
+              ">
+                    <button (click)="seleccionarMiProducto(producto._id)" class="trade-btn">
+                Ofrecer este producto
+              </button>
+                </ng-container>
+                <ng-template #botonSolicitar>
+                    <button (click)="solicitarTrueque(producto)">Solicitar</button>
+                </ng-template>
             </div>
-        </ng-template>
+        </div>
+</div>
+</ng-template>
 
-        <ng-template #noProductos>
-            <p>No hay productos disponibles.</p>
-        </ng-template>
-    </section>
+<ng-template #noProductos>
+    <p>No hay productos disponibles.</p>
+</ng-template>
+</section>
 
-    <!-- Si no ha iniciado sesión, mostrar este mensaje -->
-    <ng-template #noSesion>
-        <p class="no-session-msg">Debes iniciar sesión para ver los productos disponibles.</p>
-    </ng-template>
+<!-- Si no ha iniciado sesión, mostrar este mensaje -->
+<ng-template #noSesion>
+    <p class="no-session-msg">
+        Debes iniciar sesión para ver los productos disponibles.
+    </p>
+</ng-template>
 </div>
