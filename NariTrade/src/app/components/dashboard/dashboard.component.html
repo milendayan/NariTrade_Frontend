@@ -32,7 +32,9 @@
         <ng-template [ngIf]="productos && productos.length > 0" [ngIfElse]="noProductos">
             <div class="products-grid">
                 <div *ngFor="let producto of productos" class="product-card">
-                    <img [src]="'/assets/uploads/' + producto.img[0]" [alt]="producto.titulo" class="product-image" />
+                    <img *ngIf="producto.img?.length > 0" [src]="producto.img[0]" alt="Imagen del producto" class="product-image" />
+                    <span *ngIf="!producto.img?.length">Sin imagen</span>
+
                     <div class="product-details">
                         <h3>{{ producto.titulo }}</h3>
                         <p>{{ producto.descri }}</p>
