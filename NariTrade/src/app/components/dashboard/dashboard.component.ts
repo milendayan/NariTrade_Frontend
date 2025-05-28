@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   isLoading: boolean = true;
   productoSeleccionado: string = '';
 
-  private apiUrl = 'http://localhost:3070/NariTrade/comercio';
+  private apiUrl = 'http://localhost:3070/NariTrade';
 
   constructor(
     public authService: AuthService,
@@ -41,8 +41,10 @@ export class DashboardComponent implements OnInit {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-
-    this.http.get<any[]>(`${this.apiUrl}/items`, { headers }).subscribe({
+const currentUser = this.authService.currentUserValue;
+    const esAdmin = currentUser?.role === 'admin';
+    const endpoint = esAdmin ? '/items/all' : '/comercio/items';
+    this.http.get<any[]>(`${this.apiUrl}${endpoint}`, { headers }).subscribe({
       next: (data) => {
         this.productos = data;
         this.isLoading = false;
@@ -68,4 +70,28 @@ export class DashboardComponent implements OnInit {
     localStorage.setItem('productoDeseado', JSON.stringify(producto));
     this.router.navigate(['/ofertar']); // Redirige al componente Ofertar
   }
+  bloquearProducto(id: string) {
+  const token = localStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  this.http.put(`${this.apiUrl}/items/updateBloqueado/${id}`, {}, { headers }).subscribe({
+    next: () => this.listarProductos(),
+    error: (err) => console.error('Error al bloquear producto:', err)
+  });
+}
+
+desbloquearProducto(id: string) {
+  const token = localStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  this.http.put(`${this.apiUrl}/items/updateDesbloqueado/${id}`, {}, { headers }).subscribe({
+    next: () => this.listarProductos(),
+    error: (err) => console.error('Error al desbloquear producto:', err)
+  });
+}
+
 }
