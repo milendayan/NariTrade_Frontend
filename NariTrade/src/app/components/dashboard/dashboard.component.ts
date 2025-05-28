@@ -64,28 +64,8 @@ export class DashboardComponent implements OnInit {
     alert('Producto seleccionado para ofrecer en trueque.');
   }
 
-  solicitarTrueque(idProductoQuiere: string): void {
-    if (!this.productoSeleccionado) {
-      alert('Primero selecciona uno de tus productos para ofrecer.');
-      return;
-    }
-
-    const token = localStorage.getItem('token');
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
-    const url = `${this.apiUrl}/solicitar/${idProductoQuiere}/${this.productoSeleccionado}`;
-
-    this.http.post(url, {}, { headers }).subscribe({
-      next: () => {
-        alert('Solicitud de trueque enviada con éxito.');
-        this.productoSeleccionado = ' ';
-        this.listarProductos(); // Si tienes un método para refrescar la vista
-      },
-      error: (err) => {
-        alert(err.error?.message || 'Error al solicitar trueque.');
-      },
-    });
+  solicitarTrueque(producto: any): void {
+    localStorage.setItem('productoDeseado', JSON.stringify(producto));
+    this.router.navigate(['/ofertar']); // Redirige al componente Ofertar
   }
 }
