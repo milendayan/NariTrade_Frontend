@@ -6,6 +6,8 @@ import { RegistroComponent } from './registro/registro.component';
 import { AnunciosComponent } from './anuncios/anuncios.component'; // ← Asegúrate que la ruta es correcta
 import { authGuard } from './guards/auth.guard';
 import { OfertarComponent } from './ofertar/ofertar.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -28,6 +30,16 @@ export const routes: Routes = [
   {
     path: 'ofertar', // ← Nueva ruta protegida
     component: OfertarComponent,
+    canActivate: [authGuard],
+  },
+    {
+    path: 'usuarios', // ← Nueva ruta protegida
+    component: UsuariosComponent,
+    canActivate: [authGuard],
+  },
+    {
+    path: 'estadisticas', // ← Nueva ruta protegida
+    component: EstadisticasComponent,
     canActivate: [authGuard],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

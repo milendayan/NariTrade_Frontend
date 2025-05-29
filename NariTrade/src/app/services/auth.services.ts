@@ -87,7 +87,10 @@ tap((res: any) => {
     this.currentUserSubject.next(user);
   }
 
-  clearCurrentUser(): void {
-    this.currentUserSubject.next(null);
-  }
+clearCurrentUser() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('currentUser');
+  this.currentUserSubject.next(null);
+}
+
 }

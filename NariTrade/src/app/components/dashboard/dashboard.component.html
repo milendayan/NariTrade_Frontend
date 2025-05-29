@@ -37,46 +37,46 @@
             <p>Cargando productos...</p>
         </div>
 
-        <ng-template [ngIf]="productos && productos.length > 0" [ngIfElse]="noProductos">
-            <div class="products-grid">
-                <div *ngFor="let producto of productos" class="product-card">
-                    <img *ngIf="producto.img?.length > 0" [src]="producto.img[0]" alt="Imagen del producto" class="product-image" />
-                    <span *ngIf="!producto.img?.length">Sin imagen</span>
+        <ng-container *ngIf="!isLoading">
+            <ng-container *ngIf="productos && productos.length > 0; else noProductos">
+                <div class="products-grid">
+                    <div *ngFor="let producto of productos" class="product-card">
+                        <img *ngIf="producto.img?.length > 0" [src]="producto.img[0]" alt="Imagen del producto" class="product-image" />
+                        <span *ngIf="!producto.img?.length">Sin imagen</span>
 
-                    <div class="product-details">
-                        <h3>{{ producto.titulo }}</h3>
-                        <p>{{ producto.descri }}</p>
-                        <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
-                        <p><strong>Precio:</strong> ${{ producto.precio }}</p>
-                        <p><strong>Estado:</strong> {{ producto.estado }}</p>
-                        <p><strong>Dueño:</strong> {{ producto.owner?.nombre }} {{ producto.owner?.apellido }}</p>
+                        <div class="product-details">
+                            <h3>{{ producto.titulo }}</h3>
+                            <p>{{ producto.descri }}</p>
+                            <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+                            <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+                            <p><strong>Estado:</strong> {{ producto.estado }}</p>
+                            <p><strong>Dueño:</strong> {{ producto.owner?.nombre }} {{ producto.owner?.apellido }}</p>
 
-                        <ng-container *ngIf="producto.idPerson === authService.currentUserValue?._id; else botonSolicitar">
-                            <button (click)="seleccionarMiProducto(producto._id)" class="trade-btn">
-                                Ofrecer este producto
-                            </button>
-                        </ng-container>
-                        <ng-template #botonSolicitar>
-                            <button *ngIf="authService.currentUserValue?.role !== 'admin'" (click)="solicitarTrueque(producto)">
-                                Solicitar
-                            </button>
-                        </ng-template>
+                            <ng-container *ngIf="producto.idPerson === authService.currentUserValue?._id; else botonSolicitar">
+                                <button (click)="seleccionarMiProducto(producto._id)" class="trade-btn">
+                                    Ofrecer este producto
+                                </button>
+                            </ng-container>
+                            <ng-template #botonSolicitar>
+                                <button *ngIf="authService.currentUserValue?.role !== 'admin'" (click)="solicitarTrueque(producto)">
+                                    Solicitar
+                                </button>
+                            </ng-template>
 
-
-                        <!-- Botones solo visibles para admin -->
-                        <div *ngIf="authService.currentUserValue?.role === 'admin'" class="admin-controls">
-                            <button *ngIf="producto.estado === 'Publicado'" (click)="bloquearProducto(producto._id)" class="admin-btn bloquear-btn">
-                                Bloquear
-                            </button>
-                            <button *ngIf="producto.estado === 'Bloqueado'" (click)="desbloquearProducto(producto._id)" class="admin-btn desbloquear-btn">
-                                Desbloquear
-                            </button>
+                            <!-- Botones solo visibles para admin -->
+                            <div *ngIf="authService.currentUserValue?.role === 'admin'" class="admin-controls">
+                                <button *ngIf="producto.estado === 'Publicado'" (click)="bloquearProducto(producto._id)" class="admin-btn bloquear-btn">
+                                    Bloquear
+                                </button>
+                                <button *ngIf="producto.estado === 'Bloqueado'" (click)="desbloquearProducto(producto._id)" class="admin-btn desbloquear-btn">
+                                    Desbloquear
+                                </button>
+                            </div>
                         </div>
-
                     </div>
                 </div>
-            </div>
-        </ng-template>
+            </ng-container>
+        </ng-container>
 
         <ng-template #noProductos>
             <p>No hay productos disponibles.</p>

@@ -16,7 +16,7 @@ export class PublicarComponent implements OnInit {
   formArticulo: FormGroup;
   imagenes: string[] = [];
   private apiUrl = 'http://localhost:3070/NariTrade/items';
-
+  private apiUr1 = 'http://localhost:3070/NariTrade';
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -83,8 +83,25 @@ export class PublicarComponent implements OnInit {
     }
   }
 
-  logout() {
-    this.authService.clearCurrentUser();
-    this.router.navigate(['/login']);
-  }
+logout() {
+  const token = localStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  this.http.post(`${this.apiUr1}/logout`, {}, { headers }).subscribe({
+    next: () => {
+      console.log('Sesión cerrada correctamente');
+    },
+    error: (err) => {
+      console.error('Error al cerrar sesión:', err);
+    },
+    complete: () => {
+      // Siempre limpiar el estado y redirigir
+      this.authService.clearCurrentUser();
+      this.router.navigate(['/login']);
+    }
+  });
+}
+
 }

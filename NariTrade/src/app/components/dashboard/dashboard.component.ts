@@ -56,10 +56,26 @@ const currentUser = this.authService.currentUserValue;
     });
   }
 
-  logout() {
-    this.authService.clearCurrentUser();
-    this.router.navigate(['/login']);
-  }
+logout() {
+  const token = localStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  this.http.post(`${this.apiUrl}/logout`, {}, { headers }).subscribe({
+    next: () => {
+      console.log('Sesión cerrada correctamente');
+    },
+    error: (err) => {
+      console.error('Error al cerrar sesión:', err);
+    },
+    complete: () => {
+      // Siempre limpiar el estado y redirigir
+      this.authService.clearCurrentUser();
+      this.router.navigate(['/login']);
+    }
+  });
+}
 
   seleccionarMiProducto(productoId: string) {
     this.productoSeleccionado = productoId;

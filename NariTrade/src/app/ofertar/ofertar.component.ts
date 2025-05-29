@@ -17,7 +17,7 @@ export class OfertarComponent implements OnInit {
   productosPropios: any[] = [];
   productoOferta: any;
   misArticulos: any;
-
+private apiUrl = 'http://localhost:3070/NariTrade';
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -49,10 +49,27 @@ export class OfertarComponent implements OnInit {
       });
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+logout() {
+  const token = localStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  this.http.post(`${this.apiUrl}/logout`, {}, { headers }).subscribe({
+    next: () => {
+      console.log('Sesión cerrada correctamente');
+    },
+    error: (err) => {
+      console.error('Error al cerrar sesión:', err);
+    },
+    complete: () => {
+      // Siempre limpiar el estado y redirigir
+      this.authService.clearCurrentUser();
+      this.router.navigate(['/login']);
+    }
+  });
+}
+
 
   seleccionarProductoOferta(producto: any): void {
     if (this.productoOferta?._id === producto._id) {

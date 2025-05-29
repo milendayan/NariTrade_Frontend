@@ -17,6 +17,7 @@ export class AnunciosComponent implements OnInit {
   isLoading = true;
   selectedItem: any = null;
   apiUrl = 'http://localhost:3070/NariTrade/items/mis';
+  private apiUr1 = 'http://localhost:3070/NariTrade';
 
   constructor(
     private http: HttpClient,
@@ -101,10 +102,26 @@ export class AnunciosComponent implements OnInit {
   }
 
   // ✅ NUEVO MÉTODO PARA CERRAR SESIÓN
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+logout() {
+  const token = localStorage.getItem('token');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  this.http.post(`${this.apiUr1}/logout`, {}, { headers }).subscribe({
+    next: () => {
+      console.log('Sesión cerrada correctamente');
+    },
+    error: (err) => {
+      console.error('Error al cerrar sesión:', err);
+    },
+    complete: () => {
+      // Siempre limpiar el estado y redirigir
+      this.authService.clearCurrentUser();
+      this.router.navigate(['/login']);
+    }
+  });
+}
   onImageChange(event: Event): void {
   const target = event.target as HTMLInputElement;
   if (target.files) {
