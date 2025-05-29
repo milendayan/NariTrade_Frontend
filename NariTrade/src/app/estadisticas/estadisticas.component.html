@@ -1,1 +1,81 @@
-<p>estadisticas works!</p>
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1>NariTrade</h1>
+        <nav class="dashboard-nav" *ngIf="authService.currentUserValue">
+            <a routerLink="/dashboard" class="nav-link">Inicio</a>
+            <ng-container *ngIf="authService.currentUserValue?.role === 'admin'">
+                <a routerLink="/usuarios" class="nav-link">Usuarios</a>
+                <a routerLink="/estadisticas" class="nav-link active">Estadísticas</a>
+            </ng-container>
+        </nav>
+        <div *ngIf="authService.currentUserValue" class="user-info">
+            <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span>
+            <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <div class="estadisticas-container">
+        <h2 class="section-title">Estadísticas Generales</h2>
+
+        <div *ngIf="isLoading" class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Cargando estadísticas...</p>
+        </div>
+
+        <div *ngIf="!isLoading && estadisticas" class="stats-grid">
+            <!-- Tarjetas de resumen (fila superior) -->
+            <div class="summary-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">{{ estadisticas.totalUsuarios }}</div>
+                    <div class="stat-label">Usuarios Totales</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-value">{{ estadisticas.totalArticulos }}</div>
+                    <div class="stat-label">Artículos Registrados</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🔄</div>
+                    <div class="stat-value">{{ estadisticas.totalTrueques }}</div>
+                    <div class="stat-label">Trueques Realizados</div>
+                </div>
+            </div>
+
+            <!-- Sección Categorías -->
+            <div class="stats-section categories-section">
+                <h3>📊 Artículos por Categoría</h3>
+                <ul class="stats-list">
+                    <li *ngFor="let cat of estadisticas.articulosPorCategoria" class="stats-item">
+                        <span class="stats-category">{{ cat._id }}</span>
+                        <span class="stats-count">{{ cat.total }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sección Roles -->
+            <div class="stats-section roles-section">
+                <h3>👨‍💼 Usuarios por Rol</h3>
+                <ul class="stats-list">
+                    <li *ngFor="let rol of estadisticas.usuariosPorRol" class="stats-item">
+                        <span class="stats-category">{{ rol._id }}</span>
+                        <span class="stats-count">{{ rol.total }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sección Estados -->
+            <div class="stats-section status-section">
+                <h3>🔄 Estados de Trueques</h3>
+                <ul class="stats-list">
+                    <li *ngFor="let estado of estadisticas.estadosTrueques" class="stats-item">
+                        <span class="stats-category">{{ estado._id }}</span>
+                        <span class="stats-count">{{ estado.total }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
