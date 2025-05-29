@@ -61,6 +61,20 @@
       </div>
     </div>
   </div>
+  <!-- ✅ Mostrar producto que estás ofertando -->
+  <div class="producto-oferta" *ngIf="productoOferta">
+  <h3>Producto que ofreces</h3>
+  <p><strong>{{ productoOferta.titulo }}</strong></p>
+  <img [src]="productoOferta.img[0]" width="150" />
+  <p>{{ productoOferta.precio | currency }}</p>
+
+  <p *ngIf="productoDeseado">
+    Rango aceptado: 
+    {{ (productoDeseado.precio * 0.7) | currency }} - 
+    {{ (productoDeseado.precio * 1.3) | currency }}
+  </p>
+</div>
+
 
   <div class="boton-oferta">
     <button (click)="enviarSolicitud()">Enviar solicitud</button>

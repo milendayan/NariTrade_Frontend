@@ -159,3 +159,19 @@
 .info {
     margin-top: 10px;
 }
+
+.producto-oferta,
+.producto-deseado {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #fafafa;
+    text-align: center;
+}
+
+.producto-oferta img,
+.producto-deseado img {
+    max-width: 150px;
+    border-radius: 8px;
+}

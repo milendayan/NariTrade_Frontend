@@ -68,12 +68,32 @@ export class OfertarComponent implements OnInit {
       return;
     }
 
+    // Validación de precios (tu código actual permanece igual)
+    const precioDeseado = this.productoDeseado.precio;
+    const precioOferta = this.productoOferta.precio;
+
+    const margen = precioDeseado * 0.3;
+    const precioMin = precioDeseado - margen;
+    const precioMax = precioDeseado + margen;
+
+    if (precioOferta < precioMin || precioOferta > precioMax) {
+      alert(
+        `El precio del producto que ofreces debe estar dentro del 30% del producto deseado.\n\n` +
+          `Precio del producto deseado: $${precioDeseado}\n` +
+          `Precio mínimo aceptado: $${precioMin}\n` +
+          `Precio máximo aceptado: $${precioMax}\n\n` +
+          `Tu producto ofrecido: $${precioOferta}`
+      );
+      return;
+    }
+
     const token = localStorage.getItem('token');
     const headers = { Authorization: `Bearer ${token}` };
 
+    // URL CORREGIDA (elimina /NariTrade y la doble barra)
     this.http
       .post(
-        `http://localhost:3070/NariTrade/solicitar/${this.productoDeseado._id}/${this.productoOferta._id}`,
+       `http://localhost:3070/NariTrade/comercio/solicitar/${this.productoDeseado._id}/${this.productoOferta._id}`,
         {},
         { headers }
       )
