@@ -4,6 +4,23 @@
     margin: 0 auto;
 }
 
+.solicitar-btn {
+    background-color: #d50000;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.solicitar-btn:hover {
+    background-color: #b71c1c;
+}
+
 
 /* ===== Header layout ===== */
 

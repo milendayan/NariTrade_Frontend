@@ -7,76 +7,119 @@
             <a routerLink="/publicar" class="nav-link">Publicar</a>
             <a routerLink="/anuncios" class="nav-link">Mis Anuncios</a>
             <a routerLink="/ofertar" class="nav-link">Ofertar</a>
+            <a routerLink="/datos" class="nav-link">Datos personales</a>
         </nav>
 
         <div *ngIf="authService.currentUserValue" class="user-info">
-            <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span
-      >
-      <span
-        *ngIf="authService.currentUserValue.rol === 'admin'"
-        class="admin-badge"
-        >(Administrador)</span
-      >
-      <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
-    </div>
-  </header>
-
-  <!-- ✅ Mover fuera del header -->
-  <div class="ofertar-container">
-    <div class="producto-deseado">
-      <h3>Producto que deseas</h3>
-      <div *ngIf="productoDeseado">
-        <p>{{ productoDeseado.titulo }}</p>
-        <img [src]="productoDeseado.img[0]" width="150" />
-        <p>{{ productoDeseado.precio | currency }}</p>
-      </div>
-    </div>
-
-    <div class="productos-propios">
-      <h3>Selecciona producto para ofrecer</h3>
-      <div class="productos-grid">
-        <div
-          *ngFor="let producto of misArticulos"
-          class="producto-card"
-          [class.seleccionado]="productoOferta?._id === producto._id"
-          (click)="seleccionarProductoOferta(producto)"
-        >
-          <img
-            *ngIf="producto.img?.[0] && producto.img[0].startsWith('data:image')"
-            [src]="producto.img[0]"
-            alt="Imagen de {{ producto.titulo }}"
-          />
-          <span
-            *ngIf="!producto.img?.[0] || !producto.img[0].startsWith('data:image')"
-            >Sin imagen válida</span
-          >
-
-          <div class="info">
-            <p>
-              <strong>{{ producto.titulo }}</strong>
-            </p>
-            <p>{{ producto.precio | currency }}</p>
-          </div>
+            <span class="welcome-text">Bienvenido {{ authService.currentUserValue.correo }}</span>
+            <span *ngIf="authService.currentUserValue.rol === 'admin'" class="admin-badge">(Administrador)</span>
+            <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
         </div>
-      </div>
+    </header>
+
+    <div class="ofertar-container">
+        <div class="producto-deseado">
+            <h3>Producto que deseas</h3>
+            <div *ngIf="productoDeseado">
+                <p><strong>{{ productoDeseado.titulo }}</strong></p>
+                <img *ngIf="productoDeseado.img?.[0]" [src]="productoDeseado.img[0]" width="150" />
+                <p>{{ productoDeseado.precio | currency }}</p>
+            </div>
+        </div>
+
+        <h2>Selecciona un producto para ofertar por:</h2>
+        <div *ngIf="productoDeseado">
+            <p><strong>{{ productoDeseado.titulo }}</strong> - {{ productoDeseado.precio | currency }}</p>
+        </div>
+
+        <div class="productos-propios">
+            <h3>Selecciona producto para ofrecer</h3>
+            <div class="productos-grid">
+                <div *ngFor="let producto of misArticulos" class="producto-card" [class.seleccionado]="productoOferta?._id === producto._id" (click)="seleccionarProductoOferta(producto)">
+                    <img *ngIf="producto.img?.[0] && producto.img[0].startsWith('data:image')" [src]="producto.img[0]" alt="Imagen de {{ producto.titulo }}" />
+                    <span *ngIf="!producto.img?.[0] || !producto.img[0].startsWith('data:image')">Sin imagen válida</span>
+
+                    <div class="info">
+                        <p><strong>{{ producto.titulo }}</strong></p>
+                        <p>Precio: {{ producto.precio | currency }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="producto-oferta" *ngIf="productoOferta">
+            <h3>Producto que ofreces</h3>
+            <p><strong>{{ productoOferta.titulo }}</strong></p>
+            <img *ngIf="productoOferta.img?.[0]" [src]="productoOferta.img[0]" width="150" />
+            <p>{{ productoOferta.precio | currency }}</p>
+
+            <p *ngIf="productoDeseado">
+                Rango aceptado: {{ (productoDeseado.precio * 0.7) | currency }} - {{ (productoDeseado.precio * 1.3) | currency }}
+            </p>
+        </div>
+
+        <div class="boton-oferta">
+            <button (click)="enviarSolicitud()">Enviar oferta</button>
+        </div>
     </div>
-  </div>
-  <!-- ✅ Mostrar producto que estás ofertando -->
-  <div class="producto-oferta" *ngIf="productoOferta">
-  <h3>Producto que ofreces</h3>
-  <p><strong>{{ productoOferta.titulo }}</strong></p>
-  <img [src]="productoOferta.img[0]" width="150" />
-  <p>{{ productoOferta.precio | currency }}</p>
 
-  <p *ngIf="productoDeseado">
-    Rango aceptado: 
-    {{ (productoDeseado.precio * 0.7) | currency }} - 
-    {{ (productoDeseado.precio * 1.3) | currency }}
-  </p>
-</div>
+    <!-- 🔽 Sección de botones toggle para propuestas y solicitudes -->
+    <div class="botones-toggle">
+        <button (click)="togglePropuestas()">Ver Mis Propuestas</button>
+        <button (click)="toggleSolicitudes()">Ver Mis Solicitudes</button>
+    </div>
+
+    <!-- 🔽 Sección de Mis Propuestas -->
+    <div class="propuestas-container" *ngIf="mostrarPropuestas">
+        <h2>Mis propuestas enviadas</h2>
+        <div *ngIf="misPropuestas.length > 0; else sinPropuestas">
+            <div *ngFor="let propuesta of misPropuestas" class="propuesta-card">
+                <p><strong>Producto ofrecido:</strong> {{ propuesta.productoOfrecido?.titulo }}</p>
+                <img *ngIf="propuesta.productoOfrecido?.img?.[0]" [src]="propuesta.productoOfrecido.img[0]" width="100" />
+
+                <p><strong>Producto deseado:</strong> {{ propuesta.productoDeseado?.titulo }}</p>
+                <img *ngIf="propuesta.productoDeseado?.img?.[0]" [src]="propuesta.productoDeseado.img[0]" width="100" />
+
+                <p><strong>Estado:</strong> {{ propuesta.trueque_estado }}</p>
+
+                <!-- Bloque nuevo: Información del destinatario de la propuesta -->
+                <div *ngIf="propuesta.personaAlaQueSePropone?.correo">
+                    <p><strong>Propuesta enviada a:</strong></p>
+                    <p>Nombre: {{ propuesta.personaAlaQueSePropone.nombre }} {{ propuesta.personaAlaQueSePropone.apellido }}</p>
+                    <p>Correo: {{ propuesta.personaAlaQueSePropone.correo }}</p>
+                    <p>Celular: {{ propuesta.personaAlaQueSePropone.celular }}</p>
+                </div>
+            </div>
+
+        </div>
+        <ng-template #sinPropuestas>
+            <p>No has enviado propuestas aún.</p>
+        </ng-template>
+    </div>
+
+    <!-- 🔽 Sección de Mis Solicitudes -->
+    <div *ngIf="mostrarSolicitudes">
+        <h2>Solicitudes Recibidas</h2>
+        <div *ngFor="let solicitud of misSolicitudes" class="card-trueque">
+            <p><strong>Mi producto:</strong> {{ solicitud.miproducto?.titulo }}</p>
+            <p><strong>Producto ofrecido:</strong> {{ solicitud.productoOfertado?.titulo }}</p>
+            <p><strong>Descripción:</strong> {{ solicitud.productoOfertado?.descri }}</p>
+            <p><strong>Categoría:</strong> {{ solicitud.productoOfertado?.categoria }}</p>
+            <p><strong>Estado de solicitud:</strong> {{ solicitud.trueque_estado }}</p>
+
+            <p><strong>Datos del oferente:</strong></p>
+            <ul>
+                <li>Nombre: {{ solicitud.personaaQueOferta?.nombre }} {{ solicitud.personaaQueOferta?.apellido }}</li>
+                <li>Correo: {{ solicitud.personaaQueOferta?.correo }}</li>
+                <li>Celular: {{ solicitud.personaaQueOferta?.celular }}</li>
+            </ul>
+
+            <button (click)="aceptarTrueque(solicitud.trueque)">Aceptar Trueque</button>
+        </div>
+    </div>
 
 
-  <div class="boton-oferta">
-    <button (click)="enviarSolicitud()">Enviar solicitud</button>
-  </div>
+    <ng-template #noSolicitudes>
+        <p>No has enviado solicitudes aún.</p>
+    </ng-template>
 </div>

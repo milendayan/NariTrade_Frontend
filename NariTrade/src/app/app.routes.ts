@@ -8,6 +8,7 @@ import { authGuard } from './guards/auth.guard';
 import { OfertarComponent } from './ofertar/ofertar.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
+import { DatosComponent } from './datos/datos.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -40,6 +41,11 @@ export const routes: Routes = [
     {
     path: 'estadisticas', // ← Nueva ruta protegida
     component: EstadisticasComponent,
+    canActivate: [authGuard],
+  },
+      {
+    path: 'datos', // ← Nueva ruta protegida
+    component: DatosComponent,
     canActivate: [authGuard],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
